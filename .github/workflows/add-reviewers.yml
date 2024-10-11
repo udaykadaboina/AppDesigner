@@ -8,21 +8,15 @@ jobs:
   add-reviewers:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Add reviewers
-        uses: actions/github-script@v6
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REVIEWERS: 'udaykadaboina'  # comma-separated list of reviewers
-        script: |
-          const reviewers = process.env.REVIEWERS.split(',');
-          const pullNumber = github.context.pullRequest.number;
-          await github.pulls.requestReviewers({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            pull_number: pullNumber,
-            reviewers: reviewers
-          });
-          console.log(`Added reviewers to PR #${pullNumber}`);
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pullNumber = github.context.pullRequest.number;
+            await github.pulls.requestReviewers({
+              owner: github.context.repo.owner,
+              repo: github.context.repo.repo,
+              pull_number: pullNumber,
+              reviewers: ['udaykadaboina']
+            });
+            console.log(`Added reviewers to PR #${pullNumber}`);
